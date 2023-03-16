@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div style="flex-direction: row; display: flex; align-items: center;">
+        <div style="margin-right: 30px;">
+            <form id="form">
+                <table border="1">
+                    <tr>
+                        <td><label>Name : </label></td>
+                        <td><input type="text" id="name" required /> </td><br><br>
+                    </tr>
+                    <tr>
+                        <td><label>Email : </label></td>
+                        <td><input type="email" id="email" required /></td><br><br>
+                    </tr>
+                    <tr>
+                        <td><label>Age : </label></td>
+                        <td><input type="number" id="age" required /></td><br><br>
+                    </tr>
+                    <tr>
+                        <td><label>Gender : </label></td>
+                        <td><input type="radio" value="Female" name="gender" id="female" />
+                            <label for="female">Female</label>
+                            <input type="radio" value="Male" name="gender" id="male" />
+                            <label for="male">Male</label><br>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label>Hobby : </label></td>
+                        <td><input type="checkbox" id="reading" name="checkbox" value="Reading" />
+                            <label for="reading">reading</label>
+                            <input type="checkbox" id="travelling" name="checkbox" value="Travelling" />
+                            <label for="travelling">Travelling</label>
+                            <input type="checkbox" id="sports" name="checkbox" value="Sports" />
+                            <label for="sports">Sports</label>
+                        </td> <br><br>
+                    </tr>
+                    <tr>
+                        <td>Country: </td>
+                        <td><select name="country" id="country">
+                                <option value="" selected="selected">Select Country</option>
+                            </select></td>
+                        <br><br>
+                    </tr>
+                    <tr>
+
+                        <td>State:</td>
+                        <td> <select name="state" id="state">
+                                <option value="" selected="selected">Please select country first</option>
+                            </select></td>
+                        <br><br>
+                    </tr>
+                    <tr>
+                        <td>City:</td>
+                        <td><select name="city" id="city">
+                                <option value="" selected="selected">Please select state first</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Action</td>
+                        <td><button type="button" onclick='validation("add")' id="submit">Save</button>
+                            <button type="button" onclick="resetData()">Reset</button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <div>
+            <input type="text" id="search" placeholder="Search Data..." onkeyup="Search()">
+            <select id="sort">
+                <option id="Ascending" value="Ascending">Ascending</option>
+                <option id="Descending" value="Descending">Descending</option>
+            </select>
+            <table border="1" id="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Age</th>
+                        <th scope="col">Gender</th>
+                        <th scope="col">Hobbies</th>
+                        <th scope="col">Country</th>
+                        <th scope="col">State</th>
+                        <th scope="col">City</th>
+                        <th scope="col">Edit</th>
+                        <th scope="col">Delete</th>
+                    </tr>
+                </thead>
+                <tbody id="showData">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+<script>
+    const name = document.getElementById("name");
+    const email = document.getElementById("email");
+    const age = document.getElementById("age");
+    const gender = document.getElementsByName("gender");
+    const hobbies = document.getElementsByName("checkbox");
+    const country = document.getElementById("country");
+    const state = document.getElementById("state");
+    const city = document.getElementById("city");
+    const table = document.getElementById('table')
+    const sort = document.getElementById('sort')
+
+    const staticData = [{
+        name: 'Dhruvi',
+        email: 'dhruvi@gmail.com',
+        age: 21,
+        Gender: 'Female',
+        Hobby: ['Travelling'],
+        Country: 'India',
+        State: 'Gujarat',
+        City: 'Surat'
+    },
+    {
+        name: 'DhruviGoyani',
+        email: 'dhruvigoyani@gmail.com',
+        age: 21,
+        Gender: 'Female',
+        Hobby: ['Travelling', 'Reading'],
+        Country: 'India',
+        State: 'Gujarat',
+        City: 'Surat'
+    }];
+    let index = null;
+
+    //for display table
+    function display(data) {
+        let tableRow = "";
+        data.forEach((ele, index) => {
+            tableRow += `<tr>
+                <td scope="row">${ele.name}</td>
+                <td>${ele.email}</td>
+                <td>${ele.age}</td>
+                <td>${ele.Gender}</td>
+                <td>${ele.Hobby}</td>
+                <td>${ele.Country}</td>
+                <td>${ele.State}</td>
+                <td>${ele.City}</td>
+                <td><button type="button" onclick="addAndEdit(${index})">Edit</td>
+                <td><button type="button" onclick="deleteData(${index})">Delete</td>
+            </tr>`;
+        });
+        if (staticData != null) {
+            const showData = document.getElementById("showData")
+            showData.innerHTML = tableRow;
+        } else {
+            showData.innerHTML = "no data"
+        }
+    }
+    display(staticData)
+
+    function addAndEdit(id, add) {
+        if (add == 'add') {
+            const obj = new Object()
+            obj.name = name.value;
+            obj.email = email.value;
+            obj.age = age.value;
+            gender.forEach(data => {
+                if (data.checked)
+                    obj.Gender = data.value
+            })
+            const hobbyChecked = []
+            hobbies.forEach(data => {
+                if (data.checked) {
+                    hobbyChecked.push(data.value)
+                    obj.Hobby = hobbyChecked;
+                }
+            })
+            obj.Country = country.value;
+            obj.State = state.value;
+            obj.City = city.value;
+            if (index == null) {
+                staticData.push(obj)
+            } else {
+                staticData[index] = obj
+                document.getElementById('submit').innerHTML = 'Save'
+                index = null
+            }
+            display(staticData)
+            resetData()
+        } else {
+            index = id;
+            const editData = staticData[id]
+            name.value = editData.name;
+            email.value = editData.email;
+            age.value = editData.age;
+            const genderValue = editData.Gender;
+            console.log({ genderValue })
+            for (let i = 0; i < gender.length; i++) {
+                if (gender[i].value == genderValue) {
+                    gender[i].checked = true;
+                }
+            }
+            const hobbiesValue = editData.Hobby;
+            console.log({ hobbiesValue })
+            for (let i = 0; i < hobbies.length; i++) {
+                if (hobbiesValue.includes(hobbies[i].value)) {
+                    hobbies[i].checked = true
+                } else {
+                    hobbies[i].checked = false
+                }
+            }
+            country.value = editData.Country;
+            country.onchange()
+            state.value = editData.State
+            state.onchange()
+            city.value = editData.City
+            document.getElementById('submit').innerHTML = 'Update'
+        }
+    }
+
+    //delete 
+    function deleteData(index) {
+        if (confirm("Are You Sure You want to delete ? ")) {
+            staticData.splice(index, 1)
+            display(staticData)
+        } else {
+            console.log("Cancel Pressed...")
+        }
+        console.log("After Delete --> ", staticData)
+    }
+
+    function resetData() {
+        document.getElementById("form").reset()
+    }
+
+    function validation(d) {
+        const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+        const nameRegex = /^[a-zA-Z\-]+$/;
+        let genderFlag = false;
+        let hobbyFlag = false;
+        if (name.value == '') {
+            alert("User Name can not be Blank")
+            return
+        } else if (!nameRegex.test(name.value)) {
+            alert("You Can not be Enter digit, special character & whiteSpace in Name")
+            return
+        } else if (name.value.length < 5) {
+            alert("please Enter Minimum 5 Character..")
+            return
+        } else { }
+
+        if (email.value == '') {
+            alert("Email Can not be Blank")
+            return
+        } else if (!emailRegex.test(email.value)) {
+            alert("Please Enter Valid Email Address")
+            return
+        } else { }
+
+        if (age.value == "") {
+            alert("Age can not be Blank")
+            return
+        } else if (age.value.length > 2) {
+            alert("Please Enter Valid Age")
+            return
+        } else { }
+
+        gender.forEach((e) => {
+            console.log({ e })
+            if (e.checked)
+                genderFlag = true
+        })
+        console.log({ genderFlag })
+        if (!genderFlag) {
+            alert("Please Select Gender")
+            return
+        }
+
+        hobbies.forEach((e) => {
+            if (e.checked)
+                hobbyFlag = true
+        })
+        if (!hobbyFlag) {
+            alert("Please Select Hobby")
+            return
+        }
+        if (country.value == '') {
+            alert("Please Select Country")
+            return
+        }
+        if (state.value == '') {
+            alert("Please Select State")
+            return
+        }
+        if (city.value == '') {
+            alert("Please Select City")
+            return
+        }
+        if (d == 'add') {
+            addAndEdit(null, 'add')
+        }
+    }
+
+    function Search() {
+        const input = document.getElementById("search");
+        console.log({ input })
+        const filter = input.value.toUpperCase();
+        console.log({ filter })
+        const tr = table.getElementsByTagName("tr")
+        for (let i = 0; i < tr.length; i++) {
+            const td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                const txtValue = td.textContent || td.innerText
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = ""
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+    function sorting(sort) {
+        let i, x, y;
+        let Swithching = true;
+
+        while (Swithching) {
+            Swithching = false;
+            const rows = table.rows;
+            for (i = 1; i < (rows.length - 1); i++) {
+                var Switch = false;
+                x = rows[i].getElementsByTagName("td")[0];
+                y = rows[i + 1].getElementsByTagName("td")[0];
+
+                if (sort == 'ascending') {
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        Switch = true;
+                        break;
+                    }
+                } else {
+                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        Switch = true;
+                        break;
+                    }
+                }
+            }
+            if (Switch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i])
+                Swithching = true
+            }
+        }
+    }
+    console.log('-->>>>>>>>> ', this)
+    sort.onchange = () => {
+        console.log('------------ ', this)
+        if (this.value == 'Ascending') {
+            sorting('ascending')
+        } else {
+            sorting('descending')
+        }
+    }
+
+    const countryData = [
+        {
+            id: 1,
+            country: "India",
+        },
+        {
+            id: 2,
+            country: "USA",
+        },
+    ];
+
+    const stateData = [
+        {
+            id: 1,
+            country_id: 1,
+            state: "Gujarat",
+        },
+        {
+            id: 2,
+            country_id: 1,
+            state: "Maharashtra",
+        },
+        {
+            id: 3,
+            country_id: 1,
+            state: "MadhyaPradesh",
+        },
+        {
+            id: 4,
+            country_id: 2,
+            state: "New York",
+        },
+        {
+            id: 5,
+            country_id: 2,
+            state: "washington D.C."
+        }
+    ];
+
+    const cityData = [
+        {
+            id: 1,
+            country_id: 1,
+            state_id: 1,
+            city: "Surat",
+        },
+        {
+            id: 2,
+            country_id: 1,
+            state_id: 1,
+            city: "Ahmedbad",
+        },
+        {
+            id: 3,
+            country_id: 1,
+            state_id: 1,
+            city: "Gandhinagar",
+        },
+        {
+            id: 4,
+            country_id: 1,
+            state_id: 2,
+            city: "Mumbai",
+        },
+        {
+            id: 5,
+            country_id: 1,
+            state_id: 2,
+            city: "Agra",
+        },
+        {
+            id: 6,
+            country_id: 1,
+            state_id: 3,
+            city: "Bhopal",
+        },
+        {
+            id: 7,
+            country_id: 2,
+            state_id: 5,
+            city: "xyz",
+        },
+        {
+            id: 8,
+            country_id: 2,
+            state_id: 5,
+            city: "pqr",
+        },
+        {
+            id: 9,
+            country_id: 2,
+            state_id: 4,
+            city: "etc...",
+        },
+        {
+            id: 10,
+            country_id: 2,
+            state_id: 4,
+            city: "Arbergen",
+        },
+    ];
+
+    window.onload = function () {
+        countryData.forEach((ele) => {
+            return (country.options[country.options.length] = new Option(ele.country, ele.country));
+        });
+    };
+
+    function changeState(array, cityValue) {
+        array.onchange = () => {
+            if (cityValue != 'city') {
+                state.length = 1;
+            }
+            city.length = 1;
+            const selectedCountry = array.options[array.selectedIndex].value;
+            if (cityValue == 'city') {
+                changeCity(selectedCountry, stateData, cityData, cityValue)
+            } else {
+                changeCity(selectedCountry, countryData, stateData)
+            }
+        };
+    }
+    changeState(country)
+    changeState(state, 'city')
+
+    function changeCity(selected, countryArray, stateArray, cityValue) {
+        const obj = countryArray.find((o) => {
+            if (cityValue == 'city') {
+                return o.state === selected
+            } else {
+                return o.country === selected
+            }
+        });
+        const selectedState = stateArray.filter((ele) => {
+            if (cityValue == 'city') {
+                return ele.state_id === obj.id;
+            } else {
+                return ele.country_id === obj.id;
+            }
+        });
+        selectedState.forEach((ele) => {
+            if (cityValue == 'city') {
+                return (city.options[city.options.length] = new Option(ele.city, ele.city));
+            } else {
+                return (state.options[state.options.length] = new Option(ele.state, ele.state));
+            }
+        });
+    }
+</script>
+
+</html>

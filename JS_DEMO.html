@@ -1,0 +1,132 @@
+<html>
+
+<body>
+    <h1>My First Web Page</h1>
+    <p>My First Paragraph</p>
+    <p id="demo"></p>
+
+    <script>
+        document.getElementById("demo").innerHTML = 5 + 6;
+
+        let obj = {
+            id: 1,
+            name: 'Dhruvi',
+            marks: {
+                maths: 60,
+                science: 70,
+            },
+            standard: [10, 12, 11]
+        }
+        Object.keys(obj).forEach(function (key, index) {
+            console.log(key, ':', obj[key])
+        });
+
+        console.log('using for .. in loop')
+        for (let i in obj) {
+            if (typeof (obj[i]) == "object") {
+                for (let j in obj.marks) {
+                    if (obj[i].length) {
+                        console.log('hhfd --- ')
+                        console.log(i, '', obj[i])
+                        break;
+                    }
+                    console.log(j, '--', obj.marks[j])
+                }
+            }
+            else {
+                console.log(i, '-', obj[i])
+            }
+        }
+
+        let text = 'It\'s alright.';
+        console.log(text)
+
+        console.log("Hello \
+Dolly!");
+        let txt = "Apple, Banana, Kiwi, Banana";
+        console.log({ txt })
+        let length = txt.length;
+        console.log('length - ', length)
+        let slice = txt.slice(7, 11);
+        console.log({ slice })
+
+        let substring = txt.substring(7, 11)
+        console.log({ substring })
+
+        let substr = txt.substr(7, 11)
+        console.log({ substr })
+
+        let newText = txt.replace(/APPLE/i, "Orange");
+        console.log('replace - ', newText)
+
+        let text1 = "     I love cats. Cats are very easy to love. Cats are very popular.    "
+        text1 = text1.replaceAll("Cats", "Dogs");
+        console.log('replace all - ', text1.trim())
+
+        console.log('upper case - ', txt.toLocaleUpperCase())
+
+        console.log('upper case - ', txt.toLocaleLowerCase())
+
+        console.log('concat - ', text.concat(" ", txt))
+
+        let padding = 5;
+        padding = padding.toString()
+        console.log('padstart - ', padding.padStart(4, "x"));
+
+        console.log('charAt - ', txt.charAt(1))
+        console.log('charCodeAt - ', txt.charCodeAt(1))
+
+        console.log('split - ', txt.split(","))
+
+        console.log('indexOf - ', txt.indexOf("Banana", 10))
+
+        console.log('lastIndexOf - ', txt.lastIndexOf("Banana"))
+
+        console.log('search - ', txt.search("Apple"))
+
+        let str = "The rain in SPAIN stays mainly in the plain";
+        const myArr = str.match(/ain/gi);
+        console.log(myArr)
+
+        console.log('includes - ', txt.includes("Banana"))
+
+        const array = [1, 2, 3];
+        console.log('---> ', array.filter(data => data > 0))
+        const object = { ...array };
+        console.log({ object })
+
+        const numbers = { e: 5, a: 6, b: 2, c: 3, d: 7 };
+        console.log({ ...object, ...numbers })
+
+        function myFunction(v, w, x, y, z) {
+            console.log(v, w, x, y, z)
+        }
+        const args = [0, 1];
+        myFunction(-1, ...args, 2, ...[3]);
+
+        const dateFields = [1970, 0, 1]; // 1 Jan 1970
+        const d = new Date(...dateFields);
+        console.log(d);
+
+        const a = [[1], [2], [3]];
+        const b = [...a];
+        console.log(b);
+
+        let arr1 = [0, 1, 2];
+        const arr2 = [3, 4, 5];
+
+        console.log([...arr1, ...arr2]);
+        // console.log([...numbers]);
+        // console.log(...object)
+        // console.log(Math.max(...numbers))                
+
+
+
+
+    </script>
+    <button onclick="document.getElementById('date').innerHTML=Date()">The time is?</button>
+
+    <p id="date"></p>
+</body>
+
+</html>
